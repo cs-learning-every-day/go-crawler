@@ -7,7 +7,7 @@ import (
 
 func main() {
 	engine.Run(engine.Request{
-		Url: "/hot-tags",
-		ParserFunc: parser.ParseTagList,
+		Url: "/books/104816",
+		ParserFunc: parser.ParseBook,
 	})
 }
