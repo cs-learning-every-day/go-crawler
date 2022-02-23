@@ -31,19 +31,25 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 	}
 
 	for _, seed := range seeds {
+		if isDuplicate(seed.Url) {
+			continue
+		}
 		e.Scheduler.Submit(seed)
 	}
 
-	count := 0
+	itemCount := 0
 	for {
 		result := <-out
 
 		for _, item := range result.Items {
-			log.Printf("Got item #%d: %v\n", count, item)
-			count++
+			log.Printf("Got item #%d: %v\n", itemCount, item)
+			itemCount++
 		}
 
 		for _, request := range result.Requests {
+			if isDuplicate(request.Url) {
+				continue
+			}
 			// 默认tags页面最多20分页
 			if strings.Contains(request.Url, "/tags") {
 				oldUrl := request.Url
@@ -70,4 +76,15 @@ func createWorker(in chan Request, out chan ParseResult, ready ReadyNotifier) {
 			out <- result
 		}
 	}()
+}
+
+var visitedUrl = make(map[string]bool)
+
+func isDuplicate(url string) bool {
+	if visitedUrl[url] {
+		return true
+	}
+
+	visitedUrl[url] = true
+	return false
 }

@@ -13,7 +13,7 @@ func main() {
 	}
 
 	e.Run(engine.Request{
-		Url:        "/hot-tags",
-		ParserFunc: parser.ParseTagList,
+		Url:        "/tags/都市",
+		ParserFunc: parser.ParseTag,
 	})
 }
