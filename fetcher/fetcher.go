@@ -3,7 +3,6 @@ package fetcher
 import (
 	"bufio"
 	"fmt"
-	"go-crawler/config"
 	"golang.org/x/net/html/charset"
 	"golang.org/x/text/encoding"
 	"golang.org/x/text/encoding/unicode"
@@ -15,7 +14,7 @@ import (
 )
 
 var rateLimiter = time.Tick(10 * time.Millisecond)
-var verboseLogging = false
+var verboseLogging = true
 
 func SetVerboseLogging() {
 	verboseLogging = true
@@ -24,7 +23,7 @@ func SetVerboseLogging() {
 func Fetch(url string) ([]byte, error) {
 	//<-rateLimiter
 	if verboseLogging {
-		log.Printf("Fetching %s", config.BaseUrl+url)
+		log.Printf("Fetching %s", url)
 	}
 
 	resp, err := http.Get(url)

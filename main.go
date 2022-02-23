@@ -2,6 +2,7 @@ package main
 
 import (
 	"go-crawler/engine"
+	"go-crawler/persist"
 	"go-crawler/scheduler"
 	"go-crawler/tuishujun/parser"
 )
@@ -10,10 +11,11 @@ func main() {
 	e := engine.ConcurrentEngine{
 		Scheduler:   &scheduler.QueuedScheduler{},
 		WorkerCount: 100,
+		ItemChan: persist.ItemSaver(),
 	}
 
 	e.Run(engine.Request{
-		Url:        "/tags/都市",
-		ParserFunc: parser.ParseTag,
+		Url:        "/hot-tags",
+		ParserFunc: parser.ParseTagList,
 	})
 }

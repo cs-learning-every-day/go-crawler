@@ -20,6 +20,8 @@ var imgUrlRe = regexp.MustCompile(
 	`<img src=".*" loading="lazy" data-src="(.*)" alt=".*"`)
 var gradeRe = regexp.MustCompile(
 	`<div class="text-4xl leading-snug" style="color: .*">(.+)</div>`)
+var introRe = regexp.MustCompile(
+	`<div class="tsj-clamp overflow-hidden text-color-medium break-word relative text-tiny text-justify leading-relaxed whitespace-pre-line max-l-2">\s*<p class="inline">\s*<span>([^\s]*)</span>`)
 
 func ParseBook(contents []byte) engine.ParseResult {
 	book := model.Book{}
@@ -29,6 +31,7 @@ func ParseBook(contents []byte) engine.ParseResult {
 	book.ChapterCount = extractString(contents, chapterCountRe)
 	book.CoverImgUrl = extractString(contents, imgUrlRe)
 	book.Grade = extractString(contents, gradeRe)
+	book.Intro = extractString(contents, introRe)
 
 	match := complexRe.FindSubmatch(contents)
 	if len(match) >= 4 {
