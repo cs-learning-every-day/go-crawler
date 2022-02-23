@@ -9,10 +9,9 @@ var tagRe = regexp.MustCompile(`<a href="(/books/\d*)" class="tsj-book-item__inf
 
 func ParseTag(contents []byte) engine.ParseResult {
 	matches := tagRe.FindAllSubmatch(contents, -1)
-
 	result := engine.ParseResult{}
 	for _, m := range matches {
-		result.Items = append(result.Items, "Book: "+string(m[2]))
+		result.Items = append(result.Items, "Book Name: "+string(m[2]))
 		result.Requests = append(result.Requests,
 			engine.Request{
 				Url:        string(m[1]),

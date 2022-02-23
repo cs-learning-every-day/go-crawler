@@ -18,6 +18,8 @@ var sourceRe = regexp.MustCompile(
 	`<div class="mt-1">\s*来源:([^</div>]*)\s*</div>`)
 var imgUrlRe = regexp.MustCompile(
 	`<img src=".*" loading="lazy" data-src="(.*)" alt=".*"`)
+var gradeRe = regexp.MustCompile(
+	`<div class="text-4xl leading-snug" style="color: .*">(.+)</div>`)
 
 func ParseBook(contents []byte) engine.ParseResult {
 	book := model.Book{}
@@ -26,6 +28,7 @@ func ParseBook(contents []byte) engine.ParseResult {
 	book.UpdateTime = extractString(contents, updateTimeRe)
 	book.ChapterCount = extractString(contents, chapterCountRe)
 	book.CoverImgUrl = extractString(contents, imgUrlRe)
+	book.Grade = extractString(contents, gradeRe)
 
 	match := complexRe.FindSubmatch(contents)
 	if len(match) >= 4 {

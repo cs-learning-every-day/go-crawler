@@ -1,13 +1,12 @@
 package engine
 
 import (
-	"go-crawler/fetcher"
 	"log"
 )
 
-const baseUrl = "https://www.tuishujun.com"
+type SimpleEngine struct{}
 
-func Run(seeds ...Request) {
+func (e SimpleEngine) Run(seeds ...Request) {
 	var requests []Request
 	for _, r := range seeds {
 		requests = append(requests, r)
@@ -17,15 +16,10 @@ func Run(seeds ...Request) {
 		r := requests[0]
 		requests = requests[1:]
 
-		log.Printf("Fetching %s", baseUrl + r.Url)
-		body, err := fetcher.Fetch(baseUrl + r.Url)
+		parserResult, err := worker(r)
 		if err != nil {
-			log.Printf("Fetcher: error Fetching url %s: %v",
-				r.Url, err)
 			continue
 		}
-
-		parserResult := r.ParserFunc(body)
 		requests = append(requests, parserResult.Requests...)
 
 		for _, item := range parserResult.Items {
