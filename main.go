@@ -8,12 +8,12 @@ import (
 
 func main() {
 	e := engine.ConcurrentEngine{
-		Scheduler:   &scheduler.SimpleScheduler{},
+		Scheduler:   &scheduler.QueuedScheduler{},
 		WorkerCount: 100,
 	}
 
 	e.Run(engine.Request{
-		Url:        "/tags/言情?page=6",
-		ParserFunc: parser.ParseTag,
+		Url:        "/hot-tags",
+		ParserFunc: parser.ParseTagList,
 	})
 }
