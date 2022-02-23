@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"go-crawler/config"
 	"go-crawler/engine"
 	"regexp"
 )
@@ -11,10 +12,13 @@ func ParseTag(contents []byte) engine.ParseResult {
 	matches := tagRe.FindAllSubmatch(contents, -1)
 	result := engine.ParseResult{}
 	for _, m := range matches {
+		url := string(m[1])
 		result.Requests = append(result.Requests,
 			engine.Request{
-				Url:        string(m[1]),
-				ParserFunc: ParseBook,
+				Url: url,
+				ParserFunc: func(c []byte) engine.ParseResult {
+					return ParseBook(c, config.BaseUrl+url)
+				},
 			})
 	}
 	return result

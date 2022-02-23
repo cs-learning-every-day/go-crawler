@@ -24,15 +24,4 @@ func TestParseTagList(t *testing.T) {
 				i, url, result.Requests[i].Url)
 		}
 	}
-
-	expectedTags := []string{
-		"重生", "都市", "轻松",
-	}
-
-	for i, tag := range expectedTags {
-		if result.Items[i] != tag {
-			t.Errorf("expected tag #%d: %s; but was %s",
-				i, tag, result.Items[i])
-		}
-	}
 }

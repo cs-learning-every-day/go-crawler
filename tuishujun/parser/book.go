@@ -11,19 +11,21 @@ var titleRe = regexp.MustCompile(
 var complexRe = regexp.MustCompile(
 	`<a href=".*" title=".*" class="text-color-medium">\s*(.*)・(.*)・(.*)\s*</a>`)
 var updateTimeRe = regexp.MustCompile(
-	`<div class="my-1">\s*更新时间:(.*)\s*</div>`)
+	`<div class="my-1">\s*更新时间: (.*)\s*</div>`)
 var chapterCountRe = regexp.MustCompile(
-	`<div class="my-1">\s*章节数:(.*)\s*</div>`)
+	`<div class="my-1">\s*章节数: (.*)\s*</div>`)
 var sourceRe = regexp.MustCompile(
-	`<div class="mt-1">\s*来源:([^</div>]*)\s*</div>`)
+	`<div class="mt-1">\s*来源: ([^</div>.]*)\s*</div>`)
 var imgUrlRe = regexp.MustCompile(
 	`<img src=".*" loading="lazy" data-src="(.*)" alt=".*"`)
 var gradeRe = regexp.MustCompile(
 	`<div class="text-4xl leading-snug" style="color: .*">(.+)</div>`)
 var introRe = regexp.MustCompile(
 	`<div class="tsj-clamp overflow-hidden text-color-medium break-word relative text-tiny text-justify leading-relaxed whitespace-pre-line max-l-2">\s*<p class="inline">\s*<span>([^\s]*)</span>`)
+var idUrlRe = regexp.MustCompile(
+	`https://www.tuishujun.com/books/(\d+)`)
 
-func ParseBook(contents []byte) engine.ParseResult {
+func ParseBook(contents []byte, url string) engine.ParseResult {
 	book := model.Book{}
 	book.Title = extractString(contents, titleRe)
 	book.Source = extractString(contents, sourceRe)
@@ -41,7 +43,14 @@ func ParseBook(contents []byte) engine.ParseResult {
 	}
 
 	return engine.ParseResult{
-		Items: []interface{}{book},
+		Items: []engine.Item{
+			{
+				Url:     url,
+				Type:    "tuishujun",
+				Id:      extractString([]byte(url), idUrlRe),
+				Payload: book,
+			},
+		},
 	}
 }
 
