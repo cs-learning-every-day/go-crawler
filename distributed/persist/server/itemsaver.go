@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"go-crawler/config"
-	config2 "go-crawler/distributed/config"
 	"go-crawler/distributed/persist"
 	"go-crawler/distributed/rpcsupport"
 	"gopkg.in/olivere/elastic.v5"
@@ -15,13 +14,13 @@ var port = flag.Int("port", 0,
 	"the port for me to listen on")
 
 func main() {
-/*	flag.Parse()
+	flag.Parse()
 	if *port == 0 {
 		fmt.Println("must specify a port")
 		return
-	}*/
+	}
 	log.Fatal(serveRpc(
-		fmt.Sprintf(":%d", config2.ItemSaverPort),
+		fmt.Sprintf(":%d", *port),
 		config.ElasticIndex))
 }
 

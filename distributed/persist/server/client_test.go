@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"go-crawler/distributed/config"
 	"go-crawler/distributed/rpcsupport"
 	"go-crawler/engine"
@@ -11,7 +10,7 @@ import (
 )
 
 func TestItemSaver(t *testing.T) {
-	host := fmt.Sprintf(":%d", config.ItemSaverPort)
+	host := ":9999"
 
 	// start ItemSaverServer
 	go serveRpc(host, "test1")

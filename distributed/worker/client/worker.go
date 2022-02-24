@@ -1,28 +1,21 @@
 package client
 
 import (
-	"fmt"
 	"go-crawler/distributed/config"
-	"go-crawler/distributed/rpcsupport"
 	"go-crawler/distributed/worker"
 	"go-crawler/engine"
+	"net/rpc"
 )
 
-func CreateProcessor() engine.Processor {
-	client, err := rpcsupport.NewClient(
-		fmt.Sprintf(":%d", config.WorkerPort0))
-	if err != nil {
-		panic(err)
-	}
-
+func CreateProcessor(clients chan *rpc.Client) engine.Processor {
 	return func(req engine.Request) (
 		engine.ParseResult, error) {
 
 		sReq := worker.SerializeRequest(req)
 
 		var sResult worker.ParseResult
-
-		err := client.Call(config.CrawlServiceRpc, sReq, &sResult)
+		c := <-clients
+		err := c.Call(config.CrawlServiceRpc, sReq, &sResult)
 
 		if err != nil {
 			return engine.ParseResult{}, err
