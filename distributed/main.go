@@ -23,6 +23,6 @@ func main() {
 
 	e.Run(engine.Request{
 		Url:        "/tags/重生",
-		ParserFunc: parser.ParseTag,
+		Parser: engine.NewFuncParser(parser.ParseTag, "ParseTag"),
 	})
 }

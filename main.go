@@ -16,11 +16,11 @@ func main() {
 	e := engine.ConcurrentEngine{
 		Scheduler:   &scheduler.QueuedScheduler{},
 		WorkerCount: 100,
-		ItemChan: itemChan,
+		ItemChan:    itemChan,
 	}
 
 	e.Run(engine.Request{
-		Url:        "/hot-tags",
-		ParserFunc: parser.ParseTagList,
+		Url:    "/hot-tags",
+		Parser: engine.NewFuncParser(parser.ParseTagList, "ParseTagList"),
 	})
 }

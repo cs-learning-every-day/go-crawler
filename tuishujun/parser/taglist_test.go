@@ -8,7 +8,7 @@ import (
 func TestParseTagList(t *testing.T) {
 	contents, _ := ioutil.ReadFile("taglist_test_data.html")
 
-	result := ParseTagList(contents)
+	result := ParseTagList(contents, "")
 	const resultSize = 1411
 	if len(result.Requests) != resultSize {
 		t.Errorf("expected result size %d; but had %d", resultSize, len(result.Requests))

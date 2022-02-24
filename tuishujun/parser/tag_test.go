@@ -11,7 +11,7 @@ func TestParseTag(t *testing.T) {
 		panic(err)
 	}
 
-	result := ParseTag(contents)
+	result := ParseTag(contents, "")
 
 	if len(result.Requests) != 15 {
 		t.Errorf("Requests should contain 15 "+
