@@ -1,26 +1,28 @@
 package main
 
 import (
-	"go-crawler/config"
+	"fmt"
+	"go-crawler/distributed/config"
+	"go-crawler/distributed/persist/client"
 	"go-crawler/engine"
-	"go-crawler/persist"
 	"go-crawler/scheduler"
 	"go-crawler/tuishujun/parser"
 )
 
 func main() {
-	itemChan, err := persist.ItemSaver(config.ElasticIndex)
+	itemChan, err := client.ItemSaver(
+		fmt.Sprintf(":%d", config.ItemSaverPort))
 	if err != nil {
 		panic(err)
 	}
 	e := engine.ConcurrentEngine{
 		Scheduler:   &scheduler.QueuedScheduler{},
 		WorkerCount: 100,
-		ItemChan: itemChan,
+		ItemChan:    itemChan,
 	}
 
 	e.Run(engine.Request{
-		Url:        "/hot-tags",
-		ParserFunc: parser.ParseTagList,
+		Url:        "/tags/重生",
+		ParserFunc: parser.ParseTag,
 	})
 }

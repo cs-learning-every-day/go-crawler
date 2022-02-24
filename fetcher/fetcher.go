@@ -14,17 +14,10 @@ import (
 )
 
 var rateLimiter = time.Tick(10 * time.Millisecond)
-var verboseLogging = true
-
-func SetVerboseLogging() {
-	verboseLogging = true
-}
 
 func Fetch(url string) ([]byte, error) {
 	//<-rateLimiter
-	if verboseLogging {
-		log.Printf("Fetching %s", url)
-	}
+	log.Printf("Fetching %s", url)
 
 	resp, err := http.Get(url)
 	if err != nil {

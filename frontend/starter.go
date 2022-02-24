@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"go-crawler/config"
 	"go-crawler/frontend/controller"
 	"net/http"
 )
@@ -10,7 +12,7 @@ func main() {
 		http.Dir("frontend/view")))
 	http.Handle("/search", controller.CreateSearchResultHandler(
 		"frontend/view/template.html"))
-	err := http.ListenAndServe(":8888", nil)
+	err := http.ListenAndServe(fmt.Sprintf(":%d", config.FrontendPort), nil)
 	if err != nil {
 		panic(err)
 	}

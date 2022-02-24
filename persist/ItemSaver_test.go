@@ -3,6 +3,7 @@ package persist
 import (
 	"context"
 	"encoding/json"
+	"go-crawler/config"
 	"go-crawler/engine"
 	"go-crawler/model"
 	"gopkg.in/olivere/elastic.v5"
@@ -28,13 +29,8 @@ func TestSave(t *testing.T) {
 		},
 	}
 
-	err := save(expected)
-	if err != nil {
-		panic(err)
-	}
-
 	client, err := elastic.NewClient(
-		elastic.SetURL("http://192.168.10.103:9200/"),
+		elastic.SetURL(config.DockerUrl),
 		// ust turn off sniff in docker
 		elastic.SetSniff(false),
 	)
@@ -42,8 +38,15 @@ func TestSave(t *testing.T) {
 		panic(err)
 	}
 
+	const index = "dating_test"
+
+	err = Save(client, index, expected)
+	if err != nil {
+		panic(err)
+	}
+
 	resp, err := client.Get().
-		Index("xiaoshuo_data").
+		Index(index).
 		Type(expected.Type).
 		Id(expected.Id).
 		Do(context.Background())

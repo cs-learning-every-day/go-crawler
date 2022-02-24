@@ -3,14 +3,15 @@ package persist
 import (
 	"context"
 	"errors"
+	"go-crawler/config"
 	"go-crawler/engine"
 	"gopkg.in/olivere/elastic.v5"
 	"log"
 )
 
-func ItemSaver() (chan engine.Item, error) {
+func ItemSaver(index string) (chan engine.Item, error) {
 	client, err := elastic.NewClient(
-		elastic.SetURL("http://192.168.10.103:9200/"),
+		elastic.SetURL(config.DockerUrl),
 		// ust turn off sniff in docker
 		elastic.SetSniff(false),
 	)
@@ -27,7 +28,7 @@ func ItemSaver() (chan engine.Item, error) {
 			item := <-out
 			log.Printf("Item Saver: got item #%d: %v\n", itemCount, item)
 
-			err := save(client, item)
+			err := Save(client, index, item)
 			if err != nil {
 				log.Printf("Item Saver: error saving item %v: %v\n", item, err)
 			}
@@ -36,14 +37,15 @@ func ItemSaver() (chan engine.Item, error) {
 	return out, nil
 }
 
-func save(client *elastic.Client, item engine.Item) error {
+func Save(client *elastic.Client,
+	index string, item engine.Item) error {
 
 	if item.Type == "" {
 		return errors.New("must supply Type")
 	}
 
 	indexService := client.Index().
-		Index("xiaoshuo_data").
+		Index(index).
 		Type(item.Type).
 		BodyJson(item)
 
