@@ -16,7 +16,7 @@ func ParseTag(contents []byte, _ string) engine.ParseResult {
 			engine.Request{
 				Url: url,
 				Parser: engine.NewFuncParser(
-					ParseBook, "ParserBook"),
+					ParseBook, "ParseBook"),
 			})
 	}
 	return result

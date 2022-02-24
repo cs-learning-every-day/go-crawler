@@ -14,13 +14,14 @@ func main() {
 		panic(err)
 	}
 	e := engine.ConcurrentEngine{
-		Scheduler:   &scheduler.QueuedScheduler{},
-		WorkerCount: 100,
-		ItemChan:    itemChan,
+		Scheduler:        &scheduler.QueuedScheduler{},
+		WorkerCount:      100,
+		ItemChan:         itemChan,
+		RequestProcessor: engine.Worker,
 	}
 
 	e.Run(engine.Request{
-		Url:    "/hot-tags",
-		Parser: engine.NewFuncParser(parser.ParseTagList, "ParseTagList"),
+		Url:    "/tags/玄幻",
+		Parser: engine.NewFuncParser(parser.ParseTag, "ParseTag"),
 	})
 }
